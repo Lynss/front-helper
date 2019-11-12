@@ -3,11 +3,18 @@ name = "front-helper"
 version = "0.1.0"
 authors = ["longyun <ly1169134156@163.com>"]
 edition = "2018"
+description = "A tool to help front works"
+homepage = "https://github.com/Lynss/front-helper"
+repository = "https://github.com/Lynss/front-helper"
+keywords = ["cli", "front-helper", "taro"]
+categories = ["command-line-utilities"]
+readme = "README.md"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-structopt = "0.3.3"
+structopt = "0.3.4"
 failure = "0.1.6"
 exitfailure = "0.5.1"
 indicatif = "0.13.0"

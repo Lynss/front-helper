@@ -115,10 +115,12 @@ pub fn execute_create_page_action(configs: &HashMap<&str, &str>) -> Result<(), E
     let style_content = Template::new(CREATION_PAGE_STYLE_TEMPLATE).render(&args);
     let mut file = File::create(&full_style_path)?;
     file.write_all(style_content.as_bytes())?;
-    //第三步，在pages文件夹下创建对应的页面文件
+    //第三步，在pages文件夹下创建对应的页面文件（todo:需要判断是否多语言）
     let full_path = format!("src/pages/{}/index.tsx", file_name);
     let content = Template::new(CREATION_PAGE_TEMPLATE).render(&args);
     let mut file = File::create(&full_path)?;
     file.write_all(content.as_bytes())?;
+    //第四步，为page页面增加路由
+    //第五步，为当前page增加多语言内容
     Ok(())
 }
