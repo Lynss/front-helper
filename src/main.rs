@@ -2,6 +2,7 @@ use dotenv::dotenv;
 use exitfailure::ExitFailure;
 use human_panic::setup_panic;
 use log::info;
+use std::env;
 use structopt::StructOpt;
 
 #[derive(StructOpt, Debug)]
@@ -18,6 +19,7 @@ pub struct Cli {
 }
 
 fn main() -> Result<(), ExitFailure> {
+    env::set_var("RUST_LOG", "info");
     setup_panic!();
     dotenv().ok();
     env_logger::init();

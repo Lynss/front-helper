@@ -1,7 +1,8 @@
+use std::io;
+use std::process::{self, Command};
+
 use failure::{Error, ResultExt};
 use log::{info, warn};
-use std::io;
-use std::process::Command;
 
 mod structs;
 mod taro_helper;
@@ -26,13 +27,15 @@ pub fn stage_before_action() -> Result<(), Error> {
         .with_context(|_| "读取用户输入失败")?;
     let continuable = continuable.to_uppercase().trim() != "N";
     if !continuable {
-        return Err(failure::err_msg("用户放弃后续操作"));
-    };
-    Command::new("git")
-        .arg("add")
-        .arg(".")
-        .output()
-        .with_context(|_| "git add . 执行失败")?;
+        info!("用户放弃后续操作");
+        process::exit(exitcode::OK);
+    } else {
+        Command::new("git")
+            .arg("add")
+            .arg(".")
+            .output()
+            .with_context(|_| "git add . 执行失败")?;
+    }
     Ok(())
 }
 
