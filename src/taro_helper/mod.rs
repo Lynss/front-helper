@@ -1,6 +1,8 @@
+use std::io;
+use std::process;
+
 use failure::{Error, ResultExt};
 use log::{info, warn};
-use std::io;
 
 mod creation;
 
@@ -26,5 +28,18 @@ pub fn match_taro_action() -> Result<(), Error> {
             );
             match_taro_action()
         }
+    }
+}
+
+pub fn safe_exit(continue_action: impl Fn() -> Result<(), Error>) -> Result<(), Error> {
+    let mut then_action = String::new();
+    info!("请进行下一步操作，输入q退出，c继续新增，其他返回上一步");
+    io::stdin()
+        .read_line(&mut then_action)
+        .with_context(|_| "读取后续操作失败")?;
+    match then_action.to_lowercase().trim() {
+        "q" => process::exit(exitcode::OK),
+        "c" => continue_action(),
+        _ => match_taro_action(),
     }
 }
