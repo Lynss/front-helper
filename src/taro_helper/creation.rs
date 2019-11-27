@@ -57,6 +57,7 @@ pub fn execute_action() -> Result<(), Error> {
 }
 
 const CREATION_STYLE_TEMPLATE: &'static str = r"
+@import '../../resources/scss/scaffold';
 .{{class_name}}{
 }
 ";
@@ -214,7 +215,10 @@ pub fn execute_create_component_action(configs: &HashMap<&str, &str>) -> Result<
         .append(true)
         .create(true)
         .open("src/components/index.ts")?;
-    let component_export = format!("export * from './{};\n'", file_name);
+    let component_export = format!(
+        "\nexport {{default as {}}} from './{}';",
+        container_name, file_name
+    );
     component_file.write_all(component_export.as_bytes())?;
     Ok(())
 }
