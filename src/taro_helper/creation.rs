@@ -63,13 +63,11 @@ const CREATION_STYLE_TEMPLATE: &'static str = r"
 ";
 
 const CREATION_PAGE_TEMPLATE: &'static str = r"
-import Taro, { Config } from '@tarojs/taro';
+import Taro, { PureComponent, Config } from '@tarojs/taro';
 import { Text, View } from '@tarojs/components';
 import { observer } from '@tarojs/mobx';
 import { formatMsg } from '@/services';
 import { CmHeader } from '@/components';
-
-import LocalComponent from '../local-component';
 
 import './index.scss';
 
@@ -78,9 +76,9 @@ interface Props {}
 interface State {}
 
 @observer
-export default class {{container_name}} extends LocalComponent<Props,State> {
+export default class {{container_name}} extends PureComponent<Props,State> {
     config: Config = {
-        navigationBarTitleText: '',
+        disableScroll: true,
     };
 
     render() {
@@ -165,6 +163,7 @@ pub fn execute_create_page_action(configs: &HashMap<&str, &str>) -> Result<(), E
 }
 
 const CREATION_COMPONENT_TEMPLATE: &'static str = r"
+import { ReactNode } from 'react';
 import Taro, { PureComponent } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 
@@ -179,7 +178,7 @@ export default class {{container_name}} extends PureComponent<Props,State> {
         addGlobalClass: true,
     };
 
-    render() {
+    render():ReactNode {
         return (
             <View className='{{class_name}}'>
             </View>
