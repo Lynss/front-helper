@@ -57,17 +57,17 @@ pub fn execute_action() -> Result<(), Error> {
 }
 
 const CREATION_STYLE_TEMPLATE: &'static str = r"
-@import '../../resources/scss/scaffold';
 .{{class_name}}{
 }
 ";
 
 const CREATION_PAGE_TEMPLATE: &'static str = r"
-import Taro, { PureComponent, Config } from '@tarojs/taro';
+import Taro, { Config } from '@tarojs/taro';
 import { Text, View } from '@tarojs/components';
 import { observer } from '@tarojs/mobx';
 import { formatMsg } from '@/services';
-import { CmHeader } from '@/components';
+
+import LocalComponent from '../local-component';
 
 import './index.scss';
 
@@ -76,15 +76,14 @@ interface Props {}
 interface State {}
 
 @observer
-export default class {{container_name}} extends PureComponent<Props,State> {
+export default class {{container_name}} extends LocalComponent<Props,State> {
     config: Config = {
-        disableScroll: true,
+        navigationBarTitleText: '',
     };
 
     render() {
         return (
             <View className='{{class_name}}'>
-                <CmHeader title={formatMsg('{{name}}.title')} />
                 <Text>请手动修改navigationBarTitleText</Text>
             </View>
         );
@@ -159,6 +158,7 @@ pub fn execute_create_page_action(configs: &HashMap<&str, &str>) -> Result<(), E
             language_file.seek(SeekFrom::Start(0)).unwrap();
             language_file.write_all(new_content.as_bytes()).unwrap();
         });
+    crate::prettier_after_action()?;
     Ok(())
 }
 
@@ -215,9 +215,10 @@ pub fn execute_create_component_action(configs: &HashMap<&str, &str>) -> Result<
         .create(true)
         .open("src/components/index.ts")?;
     let component_export = format!(
-        "\nexport {{default as {}}} from './{}';",
+        "export {{default as {}}} from './{}';",
         container_name, file_name
     );
     component_file.write_all(component_export.as_bytes())?;
+    crate::prettier_after_action()?;
     Ok(())
 }

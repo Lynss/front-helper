@@ -39,6 +39,18 @@ pub fn stage_before_action() -> Result<(), Error> {
     Ok(())
 }
 
+///执行完毕后，进行 prettier 操作
+pub fn prettier_after_action() -> Result<(), Error> {
+    info!("执行 prettier 操作");
+    Command::new("prettier")
+        .arg("--write")
+        .arg("**/*.{js,jsx,ts,tsx,json,css,scss,md}")
+        .output()
+        .with_context(|_| "prettier --write '**/*.{{js,jsx,ts,tsx,json,css,scss,md}}'执行失败")?;
+    info!("prettier --write '**/*.{{js,jsx,ts,tsx,json,css,scss,md}}'执行完毕");
+    Ok(())
+}
+
 //匹配框架名
 pub fn match_framework<'a>(framework: &'a str) -> Result<(), Error> {
     let supported_frameworks: Vec<&str> = vec!["taro"];
